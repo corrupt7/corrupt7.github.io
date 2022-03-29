@@ -6,15 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://corrupt7.github.io">
-  <title>Satori &#39;s blog</title>
+  <title>如何利用环境变量和文件上传bypass disable_function | Satori &#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Satori &#39;s blog">
-<meta property="og:url" content="https://corrupt7.github.io/index.html">
+  <meta name="description" content="0x00 关于本文最近打了虎符和Das四月赛,遇到的题都涉及到了这个知识点,将以Das中的upgdstore为例，讲一个这个方法. 0x01 PHP disable_functionsdisable_functions 是 php.ini 中的一个设置选项。相当一个黑名单，可以用来设置 PHP 环境禁止使用某些函数，通常是网站管理员为了安全起见，用来禁用某些危险的命令执行函数等。可以在phpinf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何利用环境变量和文件上传bypass disable_function">
+<meta property="og:url" content="https://corrupt7.github.io/2022/03/29/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%92%8C%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0bypass-disable-function/index.html">
 <meta property="og:site_name" content="Satori &#39;s blog">
+<meta property="og:description" content="0x00 关于本文最近打了虎符和Das四月赛,遇到的题都涉及到了这个知识点,将以Das中的upgdstore为例，讲一个这个方法. 0x01 PHP disable_functionsdisable_functions 是 php.ini 中的一个设置选项。相当一个黑名单，可以用来设置 PHP 环境禁止使用某些函数，通常是网站管理员为了安全起见，用来禁用某些危险的命令执行函数等。可以在phpinf">
 <meta property="og:locale">
+<meta property="og:image" content="http://101.35.139.181/picture/2.png">
+<meta property="article:published_time" content="2022-03-28T23:55:35.000Z">
+<meta property="article:modified_time" content="2022-03-29T04:06:24.830Z">
 <meta property="article:author" content="Corrupt">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://101.35.139.181/picture/2.png">
   
     <link rel="alternative" href="/atom.xml" title="Satori &#39;s blog" type="application/atom+xml">
   
@@ -144,16 +150,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-如何利用环境变量和文件上传bypass-disable-function" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-如何利用环境变量和文件上传bypass-disable-function" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/03/29/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%92%8C%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0bypass-disable-function/">如何利用环境变量和文件上传bypass disable_function</a>
+    <h1 class="article-title" itemprop="name">
+      如何利用环境变量和文件上传bypass disable_function
     </h1>
   
 
@@ -247,6 +251,27 @@
       
 
       
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
     </div>
     <div class="article-info article-info-index">
       
@@ -254,16 +279,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/03/29/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%92%8C%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0bypass-disable-function/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://corrupt7.github.io/2022/03/29/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%92%8C%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0bypass-disable-function/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2022/03/28/DasxSU/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">DASxSU 2022 4月赛 wp</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -283,485 +367,14 @@
 
 
 
-
   
-    <article id="post-DasxSU" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/03/28/DasxSU/">DASxSU 2022 4月赛 wp</a>
-    </h1>
   
 
-        
-        <a href="/2022/03/28/DasxSU/" class="archive-article-date">
-  	<time datetime="2022-03-28T12:06:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="WEB"><a href="#WEB" class="headerlink" title="WEB"></a>WEB</h1>
-        
-          <a class="article-more-a" href="/2022/03/28/DasxSU/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">writeup</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/03/28/DasxSU/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux SUID 提权" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/08/03/Linux%20SUID%20%E6%8F%90%E6%9D%83/">Suid提权</a>
-    </h1>
   
 
-        
-        <a href="/2021/08/03/Linux%20SUID%20%E6%8F%90%E6%9D%83/" class="archive-article-date">
-  	<time datetime="2021-08-03T12:06:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Linux-SUID-提权"><a href="#Linux-SUID-提权" class="headerlink" title="Linux SUID 提权"></a>Linux SUID 提权</h1><h2 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h2><p> 东华杯看到这种提权方式于是就简单写一下.<br>
-        
-          <a class="article-more-a" href="/2021/08/03/Linux%20SUID%20%E6%8F%90%E6%9D%83/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">提权</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/08/03/Linux%20SUID%20%E6%8F%90%E6%9D%83/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-文章推荐" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/07/28/%E6%96%87%E7%AB%A0%E6%8E%A8%E8%8D%90/">文章推荐</a>
-    </h1>
   
 
-        
-        <a href="/2021/07/28/%E6%96%87%E7%AB%A0%E6%8E%A8%E8%8D%90/" class="archive-article-date">
-  	<time datetime="2021-07-28T12:06:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
-<li><blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/242645#h3-8">从浅入深 Javascript 原型链与原型链污染 </a></p>
-</blockquote>
-</li>
-</ul>
-<h2 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h2><ul>
-<li><blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/247647">浅谈PHP原生类利用</a></p>
-</blockquote>
-</li>
-</ul>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="CTF"><a href="#CTF" class="headerlink" title="CTF"></a>CTF</h2><ul>
-<li>命令执行<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/-chenxs/p/11748488.html">NC反弹shell的几种方法</a></p>
-</blockquote>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">文章推荐</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/07/28/%E6%96%87%E7%AB%A0%E6%8E%A8%E8%8D%90/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-hbs模板注入" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/07/28/hbs%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/">CTF 中的Javascript 原型链污染</a>
-    </h1>
-  
-
-        
-        <a href="/2021/07/28/hbs%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/" class="archive-article-date">
-  	<time datetime="2021-07-28T12:06:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="CTF-中的Javascript-原型链污染"><a href="#CTF-中的Javascript-原型链污染" class="headerlink" title="CTF 中的Javascript 原型链污染"></a>CTF 中的Javascript 原型链污染</h1><h2 id="0x00-关于本文"><a href="#0x00-关于本文" class="headerlink" title="0x00 关于本文"></a>0x00 关于本文</h2><p>什么是原型链污染?两篇文章<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/4229">[1]</a><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/236182#h3-10">[2]</a>已经讲的很好了,还有两道实战,入门已经足够了。本文主要对遇到的一些JavaScript原型链污染做些记录或对网上的一些文章进行更深入的分析..(技术有限,不对的地方希望各位指出)<br>如果后续遇到什么高质量的题目也会放出来分享。</p>
-<hr>
-<hr>
-        
-          <a class="article-more-a" href="/2021/07/28/hbs%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/07/28/hbs%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JavaScript原型链污染" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/07/14/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/">JavaScript原型链污染</a>
-    </h1>
-  
-
-        
-        <a href="/2021/07/14/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" class="archive-article-date">
-  	<time datetime="2021-07-14T09:04:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Javascript-原型链与原型链污染"><a href="#Javascript-原型链与原型链污染" class="headerlink" title="Javascript 原型链与原型链污染"></a>Javascript 原型链与原型链污染</h1><h2 id="0x01-Javascript原型链"><a href="#0x01-Javascript原型链" class="headerlink" title="0x01 Javascript原型链"></a>0x01 Javascript原型链</h2><p> JavaScript 只有一种结构：对象。每个实例对象（object）都有一个私有属性（ __proto__）指向它的构造函数的原型对象（prototype）。该原型对象也有一个自己的原型对象（ __proto__），层层向上直到一个对象的原型对象为 null。根据定义，null 没有原型，并作为这个原型链中的最后一个环节。我们可以通过以下方式访问得到某一实例对象的原型对象：<br>
-        
-          <a class="article-more-a" href="/2021/07/14/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Javascript</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">原型链</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/07/14/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-python 序列化及反序列化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/07/13/python%20%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8A%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">python 序列化反序列化</a>
-    </h1>
-  
-
-        
-        <a href="/2021/07/13/python%20%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8A%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="archive-article-date">
-  	<time datetime="2021-07-13T01:18:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x00-Pickle"><a href="#0x00-Pickle" class="headerlink" title="0x00 Pickle"></a>0x00 Pickle</h2><p>本文需要提前了解序列化和反序列化(可参考PHP)pickle或cPickle，作用和PHP serialize与unserialize一样，两者只是实现的语言不同，一个是纯Python实现、另一个是C实现，函数调用基本相同，但cPickle库的性能更好,之后就以pickle库来进行演示。pickle是python语言的一个标准模块，实现了基本的数据序列化和反序列化。<br>pickle模块是以二进制的形式序列化后保存到文件中（保存文件的后缀为.pkl），不能直接打开进行预览。</p>
-        
-          <a class="article-more-a" href="/2021/07/13/python%20%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8A%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">python 序列化反序列化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/07/13/python%20%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8A%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
 
 
@@ -784,8 +397,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
